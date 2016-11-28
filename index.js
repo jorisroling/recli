@@ -29,7 +29,7 @@ var r      = require('rethinkdb'),
                .argv;
 
 
-var eyes=require('eyes').inspector({maxLength:-1,functions: false, stream: null,json:opts.quotes,colors:opts.colors })
+var eyes=require('eyes').inspector({maxLength:-1,functions: false, stream: null,json:opts.quotes || (opts.json && opts.eyes),colors:opts.colors })
 
 var writer = function(rawResult) {
   var result;
@@ -41,7 +41,7 @@ var writer = function(rawResult) {
     }
   } else if (opts.raw) {
     result = JSON.stringify(rawResult);
-  } else if (opts.json ) {
+  } else if (opts.json && !opts.eyes) {
     result = JSON.stringify(rawResult, null, 2);
   } else if (opts.inspect) {
     result = util.inspect(rawResult, {depth: null, colors: opts.colors});
@@ -71,7 +71,7 @@ exports.recli = function() {
       } catch (e) {}
     }
     opts = misc.setupOptions(opts, globalSettings, userSettings);
-	eyes=require('eyes').inspector({maxLength:-1,functions: false, stream: null,json:opts.quotes,colors:opts.colors })
+	eyes=require('eyes').inspector({maxLength:-1,functions: false, stream: null,json:opts.quotes || (opts.json && opts.eyes),colors:opts.colors })
 
     r.connect({
       host:    opts.host,
