@@ -1,3 +1,4 @@
+const eyes=require('eyes').inspector({maxLength:-1,functions: false, stream: null })
 var home = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
 var defaultConfigFile = home + '/.recli.yml';
 var r      = require('rethinkdb'),
@@ -23,6 +24,7 @@ var r      = require('rethinkdb'),
                .alias('raw',      'r')
                .alias('stream',   's')
                .alias('version',  'v')
+               .alias('inspect',  'i')
                .argv;
 
 var writer = function(rawResult) {
@@ -37,8 +39,10 @@ var writer = function(rawResult) {
     result = JSON.stringify(rawResult);
   } else if (opts.json) {
     result = JSON.stringify(rawResult, null, 2);
-  } else {
+    } else if (opts.inspect) {
     result = util.inspect(rawResult, {depth: null, colors: opts.colors});
+  } else {
+      result = eyes(rawResult);
   }
   return result;
 }

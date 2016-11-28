@@ -7,6 +7,7 @@
   "preferGlobal": true,
   "dependencies": {
     "coffee-script": "1.7.x",
+    "eyes": "^0.1.8",
     "js-yaml": "3.0.x",
     "optimist": "0.6.x",
     "repl.history": "0.1.x",
