@@ -1,4 +1,3 @@
-const eyes=require('eyes').inspector({maxLength:-1,functions: false, stream: null })
 var home = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
 var defaultConfigFile = home + '/.recli.yml';
 var r      = require('rethinkdb'),
@@ -12,7 +11,7 @@ var r      = require('rethinkdb'),
     misc   = require('./lib/misc'),
     pj     = require('./package.json');
     opts   = require('optimist')
-               .boolean(['c', 'colors', 'j', 'n', 'r', 'v', 's'])
+               .boolean(['c', 'colors', 'j', 'n', 'r', 'v', 's', 'i', 'e', 'q'])
                .default('colors', true)
                .default('file', defaultConfigFile)
                .alias('coffee',   'c')
@@ -25,7 +24,12 @@ var r      = require('rethinkdb'),
                .alias('stream',   's')
                .alias('version',  'v')
                .alias('inspect',  'i')
+			   .alias('eyes',     'e')
+			   .alias('quotes',   'q')
                .argv;
+
+
+var eyes=require('eyes').inspector({maxLength:-1,functions: false, stream: null,json:opts.quotes,colors:opts.colors })
 
 var writer = function(rawResult) {
   var result;
@@ -37,12 +41,12 @@ var writer = function(rawResult) {
     }
   } else if (opts.raw) {
     result = JSON.stringify(rawResult);
-  } else if (opts.json) {
+  } else if (opts.json ) {
     result = JSON.stringify(rawResult, null, 2);
-    } else if (opts.inspect) {
+  } else if (opts.inspect) {
     result = util.inspect(rawResult, {depth: null, colors: opts.colors});
   } else {
-      result = eyes(rawResult);
+    result = eyes(rawResult);
   }
   return result;
 }
@@ -67,6 +71,7 @@ exports.recli = function() {
       } catch (e) {}
     }
     opts = misc.setupOptions(opts, globalSettings, userSettings);
+	eyes=require('eyes').inspector({maxLength:-1,functions: false, stream: null,json:opts.quotes,colors:opts.colors })
 
     r.connect({
       host:    opts.host,
@@ -112,4 +117,3 @@ exports.recli = function() {
 };
 
 exports.recli();
-

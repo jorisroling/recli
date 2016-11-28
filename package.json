@@ -1,13 +1,13 @@
 {
   "name": "recli",
-  "version": "0.2.4",
+  "version": "0.2.4-eyes",
   "author": "Stian Grytøyr",
   "description": "RethinkDB CLI query tool and REPL",
   "main": "index.js",
   "preferGlobal": true,
   "dependencies": {
     "coffee-script": "1.7.x",
-    "eyes": "^0.1.8",
+    "eyes": "https://github.com/jorisroling/eyes.js.git",
     "js-yaml": "3.0.x",
     "optimist": "0.6.x",
     "repl.history": "0.1.x",
